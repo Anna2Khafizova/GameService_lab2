@@ -44,16 +44,16 @@
 Ход работы:
 
 Повторяя действия лектора в видео, я открыла Packet Manager в Unity и скачала необходимые для выполнения данной лабораторной работы assets. (*Dragon for Boss Monster* для получения 3D моделей множества драконов и *Fire & Spell Effects для получения анимаций соприкосновения яиц и площадкой, текстуру для которой также получим из этого asset).
-![Task1](image4.png)
+![Task1](https://github.com/Anna2Khafizova/GameService_lab2/tree/main/screenshots/image4.png)
 
 
 Далее я вытащила модельку дракона и выбрала ей понравившейся мне цвет. Соединила дракона с анимацией полёта. Создала внутриигровой объект яйцо по заданным параметрам и добавила для него материал, который в дальнейшем послужит для определения цвета всех вызванных яиц.
-![Task1](image1.png)
+![Task1](https://github.com/Anna2Khafizova/GameService_lab2/tree/main/screenshots/image1.png)
 
 Также я создала объект энергетический щит и добавила для него материал цвета. На скриншоте можно заметить модельку дракона с раскрытыми крыльями, так как на данный момен тсцена запущена и он находится в полёте. Добавила префаб яйца.
-![Task1](image2.png)
+![Task1](https://github.com/Anna2Khafizova/GameService_lab2/tree/main/screenshots/image2.png)
 Настроила камеру по множеству новых настроек, благодаря чему игроку будет удобнее следить за происходящими действиями.
-![Task1](image3.png)
+![Task1](https://github.com/Anna2Khafizova/GameService_lab2/tree/main/screenshots/image3.png)
 Следующим кодом мы выставляем переменные, с помощью которых в методе *Update* мы задаём движение дракона, чтобы он не выходил за пределы нашего экрана.
 ```c#
 public GameObject dragonEggPrefab;
@@ -97,7 +97,7 @@ void DropEgg(){
 ```
 
 Добавляем плоскость и окрашиваем её в цвет магмы из asset со спецэффектами. 
-![Task1](image6.png)
+![Task1](https://github.com/Anna2Khafizova/GameService_lab2/tree/main/screenshots/image6.png)
 Далее написан код для яиц, благодаря которому у нас генерировались и уничтожались яйца при соприкосновении с добавленной выше платформой.
 ```c#
 void OnTriggerEnter(Collider other)
@@ -119,7 +119,7 @@ void OnTriggerEnter(Collider other)
     }
 ```
 Можно увидеть на скришоте ниже, что создаётся эффект взрыва в момент уничтожения яйца при его соприкосновении с платформой.
-![Task1](image7.png)
+![Task1](https://github.com/Anna2Khafizova/GameService_lab2/tree/main/screenshots/image7.png)
 
 Далее мы пишем код, благодаря которому в дальнейшем у нас будет система трёх жизней, при потере каждой из которых наш энергетический щит будет уменьшаться в размере.
 ```c#
@@ -138,13 +138,12 @@ public GameObject energyShieldPrefab;
     }
 ```
 На скриншоте можно заметить вызов трёх энергетических щитов разных размеров, значит код работает корректно.
-![Task1](image8.png)
+![Task1](https://github.com/Anna2Khafizova/GameService_lab2/tree/main/screenshots/image8.png)
 
 Далее, следуя инструкциям в видео, я зашла на сайт Яндекс Игр для разработчиков и заполнила большинство необходимой информации и загрузила иконку с обложкой для игры:
-![Task1](image9.png)
-![Task1](image10.png)
-![Task1](image11.png)
-
+![Task1](https://github.com/Anna2Khafizova/GameService_lab2/tree/main/screenshots/image8.png)
+![Task1](https://github.com/Anna2Khafizova/GameService_lab2/tree/main/screenshots/image9.png)
+![Task1](https://github.com/Anna2Khafizova/GameService_lab2/tree/main/screenshots/image10.png)
 
 
 
@@ -162,14 +161,14 @@ public GameObject energyShieldPrefab;
     </script>
 ```
 Как видно на скриншоте ниже, в консоль вывелось сообщение о том, что SDK подключён.
-![Task2](image12.png)
+![Task2](https://github.com/Anna2Khafizova/GameService_lab2/tree/main/screenshots/image12.png)
 
 
 
 ## Задание 3
 ### 1.	Произвести сравнительный анализ игровых сервисов Яндекс Игры и VK Game
 Ссылку на реферат с сравнительным анализом игровых сервисов можно найти по ссылке ниже
-https://github.com/Anna2Khafizova/GameService_lab2
+https://github.com/Anna2Khafizova/GameService_lab2/blob/main/referat.docx
 
 ## Выводы
 
