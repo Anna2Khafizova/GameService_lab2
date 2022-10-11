@@ -141,9 +141,14 @@ public GameObject energyShieldPrefab;
 ![Task1](screenshots/image8.png)
 
 Далее, следуя инструкциям в видео, я зашла на сайт Яндекс Игр для разработчиков и заполнила большинство необходимой информации и загрузила иконку с обложкой для игры:
-![Task1](screenshots/image9.png)
-![Task1](screenshots/image10.png)
-![Task1](screenshots/image11.png)
+
+![Task1](screenshots/image9.PNG)
+
+
+![Task1](screenshots/image10.PNG)
+
+
+![Task1](screenshots/image11.PNG)
 
 
 
@@ -161,7 +166,7 @@ public GameObject energyShieldPrefab;
     </script>
 ```
 Как видно на скриншоте ниже, в консоль вывелось тестовое сообщение о том, что SDK подключён.
-![Task2](screenshots/image12.png)
+![Task2](screenshots/image12.PNG)
 
 
 
