@@ -1,5 +1,5 @@
-# Разработка игровых сервисов Лабораторная работа #3
-Отчет по лабораторной работе #3 выполнил(а):
+# Разработка игровых сервисов Лабораторная работа #2
+Отчет по лабораторной работе #2 выполнил(а):
 - Хафизова Анна Эдуардовна
 - РИ300012
 Отметка о выполнении заданий (заполняется студентом):
@@ -35,131 +35,156 @@
 - ✨Magic ✨
 
 ## Цель работы
-Интеграция интерфейса пользователя в разрабатываемое интерактивное приложение.
+Создание интерактивного приложения и изучение принципов интеграции в него игровых сервисов.
 
 
 ## Задание 1
-### Используя видео-материалы практических работ 1-2 повторить реализацию игровых механик.
+### По теме видео практических работ 1-5 повторить реализацию игры на Unity. Привести описание выполненных действий.
 
 Ход работы:
 
-В первой части данной лабораторной работы мы создаём код для перемещения игрового объекта **EnergyShield** вслед за указателем мыши:
-```c#
-Vector3 mousePos2D = Input.mousePosition;
-        mousePos2D.z = -Camera.main.transform.position.z;
-        Vector3 mousePos3D = Camera.main.ScreenToWorldPoint(mousePos2D);
-        Vector3 pos = this.transform.position;
-        pos.x = mousePos3D.x;
-        this.transform.position = pos;
-```
-Перемещение **EnergyShield** вслед за указателем мыши можно увидеть ниже:
-![Shield-following-mouse](screenshots/gif1.gif)
+Повторяя действия лектора в видео, я открыла Packet Manager в Unity и скачала необходимые для выполнения данной лабораторной работы assets. (*Dragon for Boss Monster* для получения 3D моделей множества драконов и *Fire & Spell Effects для получения анимаций соприкосновения яиц и площадкой, текстуру для которой также получим из этого asset).
+![Task1](screenshots/image4.png)
 
-Далее мы хотим добавить уничтожение объекта **DragonEgg** при соприкосновении с энергетическим щитом (можно увидеть на gif выше, как яйцо просто отскакивает от щита на данный момент). Для этого добавим новый метод **OnCollisionEnter**:
+
+Далее я вытащила модельку дракона и выбрала ей понравившейся мне цвет. Соединила дракона с анимацией полёта. Создала внутриигровой объект яйцо по заданным параметрам и добавила для него материал, который в дальнейшем послужит для определения цвета всех вызванных яиц.
+![Task1](screenshots/image1.png)
+
+Также я создала объект энергетический щит и добавила для него материал цвета. На скриншоте можно заметить модельку дракона с раскрытыми крыльями, так как на данный момен сцена запущена и он находится в полёте. Добавила префаб яйца.
+![Task1](screenshots/image2.png)
+Настроила камеру по множеству новых настроек, благодаря чему игроку будет удобнее следить за происходящими действиями.
+![Task1](screenshots/image3.png)
+Следующим кодом мы выставляем переменные, с помощью которых в методе *Update* мы задаём движение дракона, чтобы он не выходил за пределы нашего экрана.
 ```c#
-void OnCollisionEnter(Collision coll)
-    {
-        GameObject Collided = coll.gameObject;
-        if (Collided.tag == "Dragon Egg"){
-            Destroy(Collided);
+public GameObject dragonEggPrefab;
+public float speed = 1;
+public float timeBetweenEggDrops = 1f;
+public float leftRightDistance = 10f;
+public float chanceDirection = 0.1f;
+    
+
+void Update()
+{
+    Vector3 pos = transform.position;
+    pos.x += speed * Time.deltaTime;
+    transform.position = pos;
+
+    if (pos.x < -leftRightDistance){
+        speed = Mathf.Abs(speed);  
+    }
+    else if (pos.x > leftRightDistance){
+        speed = -Mathf.Abs(speed);
+     }
+}
+
+```
+С помощью кода ниже дракон будет менять траекторию его движение на противоположное со случайной вероятностью.
+```c#
+private void FixedUpdate() {
+        if (Random.value < chanceDirection){
+            speed *= -1;
         }
     }
 ```
-Теперь можно заметить, как падающие яйца уничтожаются при соприкосновении с энергетическим щитом:
-![Destroying-eggs-by-touching-shield](screenshots/gif2.gif)
-
-Я создала новый canvas, который в будущем будет отображать счёт пойманных яиц на экране. Немного настроив canvas, можно увидеть слово Score в правом верхнем углу экрана при запуске игры.
-![Canvas-right-angle](screenshots/image1.png)
-
-Чтобы счётчик работал, импортируем библиотеку TMPro написав в начале скрипта:
+Пишем метод *DropEgg*, благодаря которому наш дракон будет генерировать в себе яца по ходу своего движения:
 ```c#
-using TMPro;
-```
-Добавим переменную и код, который будет при запуске сцены вместо надписи Score будет отображать **0**:
-
-```c#
-public TextMeshProUGUI scoreGT;
-
-    void Start() {
-        GameObject scoreGO = GameObject.Find("Score");
-        scoreGT = scoreGO.GetComponent<TextMeshProUGUI>();
-        scoreGT.text = "0";
+void DropEgg(){
+        Vector3 myVector = new Vector3(0.0f, 5.0f, 0.0f);
+        GameObject egg = Instantiate<GameObject>(dragonEggPrefab);
+        egg.transform.position = transform.position + myVector;
+        Invoke("DropEgg", timeBetweenEggDrops);
     }
 ```
-Научим скрипт-файл подсчитывать количество пойманных энергетическим щитом драконьих яиц, для этого в метод **OnCollisionEnter** добавим следующее:
+
+Добавляем плоскость и окрашиваем её в цвет магмы из asset со спецэффектами:
+![Task1](screenshots/image6.png)
+Далее написан код для яиц, благодаря которому у нас генерировались и уничтожались яйца при соприкосновении с добавленной выше платформой:
 ```c#
-int score = int.Parse(scoreGT.text);
-score += 1;
-scoreGT.text = score.ToString();
+void OnTriggerEnter(Collider other)
+    {
+        ParticleSystem ps = GetComponent<ParticleSystem>();
+        var em = ps.emission;
+        em.enabled = true;
+
+        Renderer rend;
+        rend = GetComponent<Renderer>();
+        rend.enabled = false;
+    }
+
+    void Update()
+    {
+        if (transform.position.y < bottomY){
+            Destroy(this.gameObject);
+        }
+    }
 ```
-Ниже можно увидеть как при ловле яиц повышается количество очков в правом верхнем углу экрана.
-![Score-is-working](screenshots/gif3.gif)
+Можно увидеть на скришоте ниже, что создаётся эффект взрыва в момент уничтожения яйца при его соприкосновении с платформой:
+![Task1](screenshots/image7.png)
+
+Далее мы пишем код, благодаря которому в дальнейшем у нас будет система трёх жизней, при потере каждой из которых наш энергетический щит будет уменьшаться в размере:
+```c#
+public GameObject energyShieldPrefab;
+    public int numEnergyShield = 3;
+    public float energyShieldBottomY = -6f;
+    public float energyShieldRadius = 1.5f;
+    
+    void Start()
+    {
+        for (int i = 1; i <= numEnergyShield; i++){
+            GameObject tShieldGo = Instantiate<GameObject>(energyShieldPrefab);
+            tShieldGo.transform.position = new Vector3(0, energyShieldBottomY, 0);
+            tShieldGo.transform.localScale = new Vector3(1*i, 1*i, 1*i);
+        }
+    }
+```
+На скриншоте можно заметить вызов трёх энергетических щитов разных размеров, значит код работает корректно.
+![Task1](screenshots/image8.png)
+
+Далее, следуя инструкциям в видео, я зашла на сайт Яндекс Игр для разработчиков и заполнила большинство необходимой информации и загрузила иконку с обложкой для игры:
+
+![Task1](screenshots/image9.PNG)
 
 
+![Task1](screenshots/image10.PNG)
+
+
+![Task1](screenshots/image11.PNG)
 
 
 
 ## Задание 2
-### Используя видео-материалы практических работ 3-4 повторить реализацию игровых механик.
-Напишем метод **DragonEggDestroyed**, в котором при падении яйца на землю здоровье энергетического щита будет уменьшаться на единицу:
-```c#
-public void DragonEggDestroyed(){
-        GameObject[] tDragonEggArray = GameObject.FindGameObjectsWithTag("Dragon Egg");
-        foreach (GameObject tGO in tDragonEggArray){
-            Destroy(tGO);
-        }
-        int shieldIndex = shieldList.Count - 1;
-        GameObject tShieldGo = shieldList[shieldIndex];
-        shieldList.RemoveAt(shieldIndex);
-        Destroy(tShieldGo);
-    }
+### В проект, выполненный в предыдущем задании, добавить систему проверки того, что SDK подключен (доступен в режиме онлайн и отвечает на запросы);
+Я изменила тип проекта на *WebGL* (предварительно скачав данное расширение из интернета), и в файл index.html добавила следующий код, найденный в документации Яндекс SDK:
+```html
+<!-- Yandex Games SDK -->
+    <script src="https://yandex.ru/games/sdk/v2"></script>
+    <script>
+    YaGames.init().then(ysdk => {
+        Debug.log("Яндекс SDK подключён");
+        window.ysdk = ysdk;
+        });
+    </script>
 ```
-Ниже можно убедиться, что код работаёт и при не-ловле драконьего яйца энергетический щит уменьшается в размере:
-![Less-health-less-shield](screenshots/gif4.gif)
+Как видно на скриншоте ниже, в консоль вывелось тестовое сообщение о том, что SDK подключён.
+![Task2](screenshots/image12.PNG)
 
-Однако, когда здоровье энергетического щита становится меньше нуля, у нас возникает ошибка выхода за пределы массива. Чтобы исправить её, в метод выше (DragonEggDestroyed) добавим код, который будет перезапускать сцену и сбрасывать счётчик очков, как только здоровье щита станет равным нулю:
-
-```c#
-if (shieldList.Count == 0){
-    SceneManager.LoadScene("_0scene");
-}
-```
-
-Далее я скачала asset pack **Autumn Mountain** для добавления префаба и текстур горы и окружающего неба. На скриншоте ниже можно заметить новое окружение у дракона:
-![Beautiful-world](screenshots/image2.PNG)
-
-После чего, следуя инструкциям по видео, я создала несколько папок для структуирования исходных файлов в проекте. 
-
-Также я узнала, что благодаря добавлению нижнего подчеркивания перед именем папки, сама папка повышается вверх в списке иерархии, что очень удобно.
-
-На скриншоте ниже можно заметить, как беспорядок в одной папке был распределён в порядок по разным папкам, после чего все больше не нужные ассеты были удалены.
-![Beautiful-world](screenshots/image3.PNG)
 
 
 ## Задание 3
-### 	Используя видео-материалы практической работы 5 повторить реализацию игровых механик.
-Для дальнейшей работы я скачала и импортировала плагин PluginYG и добавила на каждую сцену объект YandexGame.
+### 1.	Произвести сравнительный анализ игровых сервисов Яндекс Игры и VK Game
+Ссылку на реферат с сравнительным анализом игровых сервисов можно найти по ссылке ниже
+https://github.com/Anna2Khafizova/GameService_lab2/blob/main/referat.docx
 
-Проект уже с предыдущей практики у меня был настроен на WebGL, однако в этот раз, благодаря плагину-помощнику, процесс был заметно легче и быстрее.
-![WebGL-scene](screenshots/image4.PNG)
-Чтобы проверить корректность работы плагина и билда, зайдём в index.html файл и увидим там следующие строчки:
-```c#
-<!-- Yandex Games SDK -->
-    <script src="https://yandex.ru/games/sdk/v2"></script>
-```
-Именно они и значат, что подключение к Yandex SDK прошло успешно.
-
-Далее я конвертировала Яндекс Билд в архив с расширением zip и выгрузила его на сайт для разработчиков игр Яндекс. Спустя время файл прошёл проверку и теперь любой желающий может сыграть в черновик игры по ссылке: https://yandex.ru/games/app/198307?draft=true&lang=ru.
 ## Выводы
 
-В ходе лабораторной работы я создала графический интерфейс счётчика благодаря методу Collide и скачала ещё один asset для создания более красивого фона игры. Также я научилась структуированию исходных файлов в папке и загрузила тестовую версию игры на платформу Яндекса, в которую теперь могут играть имеющие доступ к ссылке люди. Дополнительно оказалось полезным знание, что благодаря добавлению нижнего подчеркивания перед именем папки, сама папка повышается вверх в списке иерархии, что очень удобно для разного структуирования.
+В ходе лабораторной работе я научилась множеству новых вещей: скачиванию новых asset'ов, глобальной настройке игровой камеры, глубже познакомилась с двумя игровыми сервисами и провела их сравнительный анализ.
 
 ✨Magic ✨
 
 | Plugin | README |
 | ------ | ------ |
 | GitHub | [https://github.com/Den1sovDm1triy/DA-in-GameDev-lab1] |
-
+| Google Drive | [plugins/googledrive/README.md][PlGd] |
 
 
 ## Powered by

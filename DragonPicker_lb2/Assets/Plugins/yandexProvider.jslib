@@ -1,8 +1,8 @@
 mergeInto(LibraryManager.library,
 {
-	AuthorizationCheck: function (playerPhotoSize, scopes)
+	AuthorizationCheck: function (playerPhotoSize, scopes, staticRBTinGame)
 	{
-		AuthorizationCheck(Pointer_stringify(playerPhotoSize), scopes);
+		AuthorizationCheck(Pointer_stringify(playerPhotoSize), scopes, staticRBTinGame);
 	},
 	
 	OpenAuthDialog: function (playerPhotoSize, scopes)
@@ -177,11 +177,6 @@ mergeInto(LibraryManager.library,
 	PaintRBTInternal: function(rbt)
 	{
 		PaintRBT(Pointer_stringify(rbt));
-	},
-	
-	StaticRBTDeactivate: function()
-	{
-		StaticRBTDeactivate();
 	},
 	
 	BuyPaymentsInternal: function(id)

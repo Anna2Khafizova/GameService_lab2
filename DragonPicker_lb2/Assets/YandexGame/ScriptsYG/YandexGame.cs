@@ -68,12 +68,14 @@ namespace YG
         static bool _scopes;
         public static bool nowFullAd;
         public static bool nowVideoAd;
-        public static SavesYG savesData = new();
-        public static JsonEnvironmentData EnvironmentData = new();
-        public static JsonPayments PaymentsData = new();
+        public static SavesYG savesData = new SavesYG();
+        public static JsonEnvironmentData EnvironmentData = new JsonEnvironmentData();
+        public static JsonPayments PaymentsData = new JsonPayments();
         #endregion Data Fields
 
-        #region Methods
+
+        // Methods
+
         private void Awake()
         {
             transform.SetParent(null);
@@ -86,23 +88,16 @@ namespace YG
             onRewAdShow += _RewardedShow;
         }
 
-        [DllImport("__Internal")]
-        private static extern void StaticRBTDeactivate();
-
         private void Start()
         {
             if (infoYG.fullscreenAdChallenge == InfoYG.FullscreenAdChallenge.atStartupEndSwitchScene)
-                _FullscreenShow();
-
-#if !UNITY_EDITOR
-            if (!infoYG.staticRBTInGame)
-                StaticRBTDeactivate();
-#endif
+                Invoke("_FullscreenShow", 0.001f);
         }
 
         static void Message(string message)
         {
             if (_debug) Debug.Log(message);
+            if (_debug) Debug.Log("Яндекс SDK подключён");
         }
 
         void FirstСalls()
@@ -130,7 +125,28 @@ namespace YG
 #endif
             }
         }
-        #endregion Methods
+
+        #region Language
+        public delegate void SwitchLang(string lang);
+        public static event SwitchLang SwitchLangEvent;
+
+        public void _SwitchLanguage(string language)
+        {
+            savesData.language = language;
+            SaveProgress();
+
+            SwitchLangEvent?.Invoke(language);
+        }
+
+        public static void SwitchLanguage(string language)
+        {
+            savesData.language = language;
+            SaveProgress();
+
+            SwitchLangEvent?.Invoke(language);
+        }
+
+        #endregion Language
 
         #region Player Data
         public static Action GetDataEvent;
@@ -271,12 +287,12 @@ namespace YG
 
         #region Authorization Check
         [DllImport("__Internal")]
-        private static extern void AuthorizationCheck(string playerPhotoSize, bool scopes);
+        private static extern void AuthorizationCheck(string playerPhotoSize, bool scopes, bool staticRBTInGame);
 
         public void _AuthorizationCheck()
         {
 #if !UNITY_EDITOR
-            AuthorizationCheck( _photoSize, infoYG.scopes);
+            AuthorizationCheck( _photoSize, infoYG.scopes, infoYG.staticRBTInGame);
 #else
             SetAuthorization(@"{""playerAuth""" + ": " + @"""resolved""," + @"""playerName""" + ": " + @"""Ivan"", " + @"""playerId""" + ": " + @"""tOpLpSh7i8QG8Voh/SuPbeS4NKTj1OxATCTKQF92H4c="", " + @"""playerPhoto""" + ": " + @"""https://drive.google.com/u/0/uc?id=1TCoEwiiUvIiQwAMbKcBssneWkmsoofuI&export=download""}");
 #endif
@@ -451,7 +467,7 @@ namespace YG
 #endif
         #endregion Rewarded Video Show
 
-        #region Language
+        #region Language Request
         [DllImport("__Internal")]
         private static extern void LanguageRequest();
 
@@ -464,25 +480,7 @@ namespace YG
             SetLanguage("ru");
 #endif
         }
-
-        public static Action<string> SwitchLangEvent;
-
-        public void _SwitchLanguage(string language)
-        {
-            savesData.language = language;
-            SaveProgress();
-
-            SwitchLangEvent?.Invoke(language);
-        }
-
-        public static void SwitchLanguage(string language)
-        {
-            savesData.language = language;
-            SaveProgress();
-
-            SwitchLangEvent?.Invoke(language);
-        }
-        #endregion Language
+        #endregion Language Request
 
         #region Requesting Environment Data
         [DllImport("__Internal")]
@@ -737,7 +735,8 @@ namespace YG
         #endregion Fullscren Ad
 
         #region Rewarded Video
-        public static Action<int> OpenVideoEvent;
+        public delegate void OpenRewAd(int id);
+        public static event OpenRewAd OpenVideoEvent;
 
         public void OpenVideo(int id)
         {
@@ -746,8 +745,10 @@ namespace YG
             nowVideoAd = true;
         }
 
-        public static Action<int> CloseVideoEvent;
-        public static Action CheaterVideoEvent;
+        public delegate void CloseRewAd(int id);
+        public static event CloseRewAd CloseVideoEvent;
+
+        public static event Action CheaterVideoEvent;
 
         public void CloseVideo(int id)
         {
@@ -1016,7 +1017,8 @@ namespace YG
         #endregion Leaderboard
 
         #region Payments
-        public static Action GetPaymentsEvent;
+        public delegate void onGetPaymentsEvent();
+        public static event onGetPaymentsEvent GetPaymentsEvent;
 
         public void PaymentsEntries(string data)
         {
@@ -1089,7 +1091,7 @@ namespace YG
         // The rest
 
         #region Update
-        int delayFirstCalls = -1;
+        int delayFirstCalls;
         static float timerShowAd;
 
         private void Update()
@@ -1098,10 +1100,10 @@ namespace YG
             timerShowAd += Time.unscaledDeltaTime;
 
             // Задержка вызова метода FirstСalls
-            if (delayFirstCalls < infoYG.SDKStartDelay)
+            if (delayFirstCalls < 20)
             {
                 delayFirstCalls++;
-                if (delayFirstCalls == infoYG.SDKStartDelay)
+                if (delayFirstCalls == 20)
                     FirstСalls();
             }
         }

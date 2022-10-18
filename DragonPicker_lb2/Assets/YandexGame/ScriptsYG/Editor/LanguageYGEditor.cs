@@ -331,7 +331,7 @@ namespace YG
                 {
                     processTranslateLabel++;
                     GUILayout.BeginHorizontal();
-                    GUILayout.Label(new GUIContent(scr.infoYG.LangName(i), CSVManager.FullNameLanguages()[i]), GUILayout.Width(20), GUILayout.Height(20));
+                    GUILayout.Label(scr.infoYG.LangName(i), GUILayout.Width(20), GUILayout.Height(20));
 
                     if (i == 0) scr.ru = EditorGUILayout.TextArea(scr.ru, GUILayout.Height(scr.textHeight));
                     else if (i == 1) scr.en = EditorGUILayout.TextArea(scr.en, GUILayout.Height(scr.textHeight));
