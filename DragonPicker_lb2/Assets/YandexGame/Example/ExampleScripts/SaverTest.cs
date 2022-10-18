@@ -43,6 +43,7 @@ public class SaverTest : MonoBehaviour
             booleanArrayToggle[i].isOn = YandexGame.savesData.openLevels[i];
 
         systemSavesText.text = $"Language - {YandexGame.savesData.language}\n" +
-        $"First Session - {YandexGame.savesData.isFirstSession}\n";
+        $"First Session - {YandexGame.savesData.isFirstSession}\n" +
+        $"Prompt Done - {YandexGame.savesData.promptDone}\n";
     }
 }

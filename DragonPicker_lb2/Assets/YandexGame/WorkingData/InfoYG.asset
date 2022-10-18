@@ -21,7 +21,7 @@ MonoBehaviour:
   staticRBTInGame: 0
   LocalizationEnable: 1
   callingLanguageCheck: 0
-  translateMethod: 0
+  translateMethod: 2
   CSVFileTranslate:
     format: 0
     name: TranslateCSV
@@ -82,4 +82,5 @@ MonoBehaviour:
     it: []
     de: []
     hi: []
+  SDKStartDelay: 0
   debug: 1

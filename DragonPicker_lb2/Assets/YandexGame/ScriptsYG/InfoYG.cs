@@ -65,19 +65,86 @@ namespace YG
         [Tooltip("Настройки для метода локализации с помощью CSV файла. Это подразоумивает перевод по ключам всех текстов игры в таблице Excel или Google Sheets.")]
         public CSVTranslate CSVFileTranslate;
 
+        #region LanguagesEnumeration
         [System.Serializable]
-        public class Languages { public bool ru, en, tr, az, be, he, hy, ka, et, fr, kk, ky, lt, lv, ro, tg, tk, uk, uz, es, pt, ar, id, ja, it, de, hi; }
+        public class Languages
+        { 
+            [Tooltip("RUSSIAN")] public bool ru;
+            [Tooltip("ENGLISH")] public bool en;
+            [Tooltip("TURKISH")] public bool tr;
+            [Tooltip("AZERBAIJANIAN")] public bool az;
+            [Tooltip("BELARUSIAN")] public bool be;
+            [Tooltip("HEBREW")] public bool he;
+            [Tooltip("ARMENIAN")] public bool hy;
+            [Tooltip("GEORGIAN")] public bool ka;
+            [Tooltip("ESTONIAN")] public bool et;
+            [Tooltip("FRENCH")] public bool fr;
+            [Tooltip("KAZAKH")] public bool kk;
+            [Tooltip("KYRGYZ")] public bool ky;
+            [Tooltip("LITHUANIAN")] public bool lt;
+            [Tooltip("LATVIAN")] public bool lv;
+            [Tooltip("ROMANIAN")] public bool ro;
+            [Tooltip("TAJICK")] public bool tg;
+            [Tooltip("TURKMEN")] public bool tk;
+            [Tooltip("UKRAINIAN")] public bool uk;
+            [Tooltip("UZBEK")] public bool uz;
+            [Tooltip("SPANISH")] public bool es;
+            [Tooltip("PORTUGUESE")] public bool pt;
+            [Tooltip("ARABAIN")] public bool ar;
+            [Tooltip("INDONESIAN")] public bool id;
+            [Tooltip("JAPANESE")] public bool ja;
+            [Tooltip("ITALIAN")] public bool it;
+            [Tooltip("GERMAN")] public bool de;
+            [Tooltip("HINDI")] public bool hi;
+        }
+
         [ConditionallyVisible(nameof(LocalizationEnable))]
         [Tooltip("Выберите языки, на которые будет переведена Ваша игра.")]
         public Languages languages;
 
         [System.Serializable]
-        public class Fonts { public Font[] defaultFont, ru, en, tr, az, be, he, hy, ka, et, fr, kk, ky, lt, lv, ro, tg, tk, uk, uz, es, pt, ar, id, ja, it, de, hi; }
+        public class Fonts
+        {
+            [Tooltip("Стандартный шрифт")] public Font[] defaultFont;
+            [Tooltip("RUSSIAN")] public Font[] ru;
+            [Tooltip("ENGLISH")] public Font[] en;
+            [Tooltip("TURKISH")] public Font[] tr;
+            [Tooltip("AZERBAIJANIAN")] public Font[] az;
+            [Tooltip("BELARUSIAN")] public Font[] be;
+            [Tooltip("HEBREW")] public Font[] he;
+            [Tooltip("ARMENIAN")] public Font[] hy;
+            [Tooltip("GEORGIAN")] public Font[] ka;
+            [Tooltip("ESTONIAN")] public Font[] et;
+            [Tooltip("FRENCH")] public Font[] fr;
+            [Tooltip("KAZAKH")] public Font[] kk;
+            [Tooltip("KYRGYZ")] public Font[] ky;
+            [Tooltip("LITHUANIAN")] public Font[] lt;
+            [Tooltip("LATVIAN")] public Font[] lv;
+            [Tooltip("ROMANIAN")] public Font[] ro;
+            [Tooltip("TAJICK")] public Font[] tg;
+            [Tooltip("TURKMEN")] public Font[] tk;
+            [Tooltip("UKRAINIAN")] public Font[] uk;
+            [Tooltip("UZBEK")] public Font[] uz;
+            [Tooltip("SPANISH")] public Font[] es;
+            [Tooltip("PORTUGUESE")] public Font[] pt;
+            [Tooltip("ARABAIN")] public Font[] ar;
+            [Tooltip("INDONESIAN")] public Font[] id;
+            [Tooltip("JAPANESE")] public Font[] ja;
+            [Tooltip("ITALIAN")] public Font[] it;
+            [Tooltip("GERMAN")] public Font[] de;
+            [Tooltip("HINDI")] public Font[] hi;
+        }
+
         [ConditionallyVisible(nameof(LocalizationEnable))]
         [Tooltip("Здесь вы можете выбрать одельные шрифты для каждого языка.")]
         public Fonts fonts;
+        #endregion LanguagesEnumeration
 
         [Header("Other")]
+
+        [Tooltip("Для более старых версий Unity требуется задержка старта SDK (задержка в кардах в секунду).\nСтавить задержку сдедует, если при запуске игры на Web сервере, после загрузки игры происходит краш или функции SDK не работают. В таком случае, обновите Unity до актуальной версии, либо поставьте задержку (рекомедруется: 20).\nЕсли SDK умпешно загружается, задержку ставить не требуется.")]
+        [Min(0)]
+        public int SDKStartDelay;
 
         [Tooltip("Вы можете выключить запись лога в консоль.")]
         public bool debug = true;

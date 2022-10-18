@@ -6125,8 +6125,7 @@ MonoBehaviour:
   textMeshComponent: {fileID: 0}
   infoYG: {fileID: 11400000, guid: 162644796a8b0d044bce3d6fda0641e3, type: 2}
   text: URL (redefine the domain)
-  ru: "URL (\u043F\u0435\u0440\u0435\u043E\u043F\u0440\u0435\u0434\u0435\u043B\u0438\u0442\u044C
-    \u0434\u043E\u043C\u0435\u043D)"
+  ru: "URL (\u043E\u043F\u0440\u0435\u0434\u0435\u043B\u0438\u0442\u044C \u0434\u043E\u043C\u0435\u043D)"
   en: URL (redefine the domain)
   tr: "URL (alan ad\u0131n\u0131 yeniden tan\u0131mlay\u0131n)"
   az: 

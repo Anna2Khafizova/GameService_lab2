@@ -8,15 +8,8 @@
     <link rel="shortcut icon" href="TemplateData/favicon.ico">
     <link rel="stylesheet" href="TemplateData/style.css">
 
-
     <!-- Yandex Games SDK -->
     <script src="https://yandex.ru/games/sdk/v2"></script>
-    <script>
-    YaGames.init().then(ysdk => {
-        Debug.log("Яндекс SDK подключён");
-        window.ysdk = ysdk;
-        });
-    </script>
 
     #if BANNER_DYNAMIC_1 || BANNER_DYNAMIC_2 || BANNER_DYNAMIC_3 || BANNER_DYNAMIC_4 || BANNER_DYNAMIC_5 || BANNER_DYNAMIC_6 || BANNER_STATIC_1 || BANNER_STATIC_2
     <!-- Yandex.RTB -->
@@ -604,6 +597,25 @@
         }
     }
 
+    function StaticRBTDeactivate() {
+        #if BANNER_STATIC_1
+        try {
+            rbtLoadGame1.classList.remove('show');
+            document.getElementById('RTBStatic1').style.display = 'none';
+        } catch (e) {
+            console.error('CRASH off RTBStatic1: ', e.message);
+        }
+        #endif
+        #if BANNER_STATIC_2
+        try {
+            rbtLoadGame2.classList.remove('show');
+            document.getElementById('RTBStatic2').style.display = 'none';
+        } catch (e) {
+            console.error('CRASH off RTBStatic2: ', e.message);
+        }
+        #endif
+    }
+
     function InitPlayer(photoSize, _scopes) {
         try {
             return ysdk.getPlayer({scopes: _scopes}).then(_player => {
@@ -656,27 +668,7 @@
         }
     }
 
-    function AuthorizationCheck(photoSize, scopes, staticRBTinGame) {
-        #if BANNER_STATIC_1
-        try {
-            if (!staticRBTinGame) {
-                rbtLoadGame1.classList.remove('show');
-                document.getElementById('RTBStatic1').style.display = 'none';
-            }
-        } catch (e) {
-            console.error('CRASH off RTBStatic1: ', e.message);
-        }
-        #endif
-        #if BANNER_STATIC_2
-        try {
-            if (!staticRBTinGame) {
-                rbtLoadGame2.classList.remove('show');
-                document.getElementById('RTBStatic2').style.display = 'none';
-            }
-        } catch (e) {
-            console.error('CRASH off RTBStatic2: ', e.message);
-        }
-        #endif
+    function AuthorizationCheck(photoSize, scopes) {
         InitPlayer(photoSize, scopes);
     }
 

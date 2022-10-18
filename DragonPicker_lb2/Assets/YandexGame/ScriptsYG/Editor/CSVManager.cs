@@ -201,7 +201,7 @@ namespace YG
 
             for (int i = 0; i < infoYG.LangArr().Length; i++)
             {
-                firstLine += "," + fullNameLanguages()[i];
+                firstLine += "," + FullNameLanguages()[i];
             }
 
             firstLine += "\n";
@@ -280,7 +280,7 @@ namespace YG
                 return "";
         }
 
-        public static string[] fullNameLanguages()
+        public static string[] FullNameLanguages()
         {
             string[] s = new string[27];
 
@@ -308,7 +308,7 @@ namespace YG
             s[21] = "ARABAIN";
             s[22] = "INDONESIAN";
             s[23] = "JAPANESE";
-            s[24] = "LITHUANIAN";
+            s[24] = "ITALIAN";
             s[25] = "GERMAN";
             s[26] = "HINDI";
 

@@ -18,6 +18,7 @@ namespace YG
         public InfoYG infoYG;
         [Space(10)]
         public string text;
+        [Tooltip("RUSSIAN")]
         public string ru, en, tr, az, be, he, hy, ka, et, fr, kk, ky, lt, lv, ro, tg, tk, uk, uz, es, pt, ar, id, ja, it, de, hi;
         public int fontNumber;
         public Font uniqueFont;
